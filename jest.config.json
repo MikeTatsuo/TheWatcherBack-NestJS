@@ -1,0 +1,26 @@
+{
+  "moduleFileExtensions": [
+    "js",
+    "json",
+    "ts"
+  ],
+  "rootDir": "src",
+  "testRegex": ".*\\.spec\\.ts$",
+  "transform": {
+    "^.+\\.(t|j)s$": "ts-jest"
+  },
+  "collectCoverageFrom": [
+    "**/*.(controller|service).(t|j)s"
+  ],
+  "coverageDirectory": "../coverage",
+  "testEnvironment": "node",
+  "moduleNameMapper": {
+    "@/(.*)": "<rootDir>/$1",
+    "@Common/(.*)": "<rootDir>/common/$1",
+    "@Config/(.*)": "<rootDir>/config/$1",
+    "@Jobs/(.*)": "<rootDir>/jobs/$1",
+    "@Models/(.*)": "<rootDir>/models/$1",
+    "@Mocks/(.*)": "<rootDir>/../mocks/$1",
+    "@Providers/(.*)": "<rootDir>/providers/$1"
+  }
+}
