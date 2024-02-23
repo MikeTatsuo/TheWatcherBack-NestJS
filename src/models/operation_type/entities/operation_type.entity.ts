@@ -13,12 +13,12 @@ export class OperationTypeEntity extends AbstractEntity {
   @IsString()
   operation_type: string;
 
-  @Column()
+  @Column({ nullable: true })
   @IsInt()
   @Min(1)
   in_operation_type_id: number;
 
-  @Column()
+  @Column({ nullable: true })
   @IsInt()
   @Min(1)
   in_registry_id: number;
