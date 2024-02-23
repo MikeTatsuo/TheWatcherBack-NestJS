@@ -1,5 +1,18 @@
-import { Body, Controller, Delete, Get, Param, Patch, Post, Put, Query } from '@nestjs/common';
-import { ApiBody, ApiParam, ApiQuery, ApiTags } from '@nestjs/swagger';
+import {
+  Body,
+  Controller,
+  Delete,
+  Get,
+  Param,
+  Patch,
+  Post,
+  Put,
+  Query,
+  UseInterceptors,
+} from '@nestjs/common';
+import { ApiBody, ApiConsumes, ApiParam, ApiQuery, ApiTags } from '@nestjs/swagger';
+import { diskStorage } from 'multer';
+import { readFileSync } from 'fs';
 
 import { PaginationOptionsDTO } from '@/common/dtos/pagination_options.dto';
 import { PaginationDTO } from '@/common/dtos/pagination.dto';
@@ -7,6 +20,7 @@ import { PaginationDTO } from '@/common/dtos/pagination.dto';
 import { PtaxService } from '@/models/ptax/ptax.service';
 import { PtaxEntity } from '@/models/ptax/entities/ptax.entity';
 import { PtaxDTO } from '@/models/ptax/interfaces/ptax.dto';
+import { FileInterceptor } from '@nestjs/platform-express';
 
 @ApiTags('PTAX')
 @Controller('ptax')
@@ -47,8 +61,38 @@ export class PtaxController {
 
   @Post()
   @ApiBody({ required: true, type: PtaxDTO })
-  createPtax(@Body() Ptax: Partial<PtaxDTO>): Promise<PtaxEntity> {
+  createPtax(@Body() Ptax: PtaxDTO): Promise<PtaxEntity> {
     return this.ptaxService.create(Ptax);
+  }
+
+  @Post('from_csv')
+  @UseInterceptors(
+    FileInterceptor('file', {
+      storage: diskStorage({
+        destination: 'csv',
+        filename: (req, file, cb) => {
+          cb(null, 'ptax.csv');
+        },
+      }),
+    }),
+  )
+  @ApiConsumes('multipart/form-data')
+  @ApiBody({
+    schema: {
+      type: 'object',
+      properties: {
+        file: {
+          type: 'string',
+          format: 'binary',
+        },
+      },
+    },
+  })
+  async createFromCSV() {
+    const csvFile = readFileSync('csv/ptax.csv');
+    const csvData = csvFile.toString();
+
+    return this.ptaxService.createFromCSV(csvData);
   }
 
   @Put(':ptax_id')
@@ -65,9 +109,14 @@ export class PtaxController {
     return this.ptaxService.update(ptax_id, Ptax);
   }
 
-  @Delete(':ptax_id')
-  @ApiParam({ name: 'ptax_id', required: true, type: 'number' })
-  deletePtax(@Param('ptax_id') ptax_id: number): Promise<number> {
+  @Delete()
+  @ApiQuery({
+    name: 'ptax_id',
+    required: true,
+    type: 'number',
+    schema: { type: 'array', items: { type: 'number' } },
+  })
+  deletePtax(@Query('ptax_id') ptax_id: number | number[]): Promise<number | number[]> {
     return this.ptaxService.delete(ptax_id);
   }
 }
