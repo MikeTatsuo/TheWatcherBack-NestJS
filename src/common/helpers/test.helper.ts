@@ -159,9 +159,16 @@ export const TestHelper = <Entity extends AbstractEntity>(mockData: Entity[]) =>
       resolve(mockData.find((item) => item[key] === value));
     });
   }),
-  save: jest.fn().mockImplementation((data: Partial<Entity> | Entity) => {
+  save: jest.fn().mockImplementation((data: Partial<Entity | Entity[]> | Entity | Entity[]) => {
     return new Promise((resolve) => {
-      if (data.id) {
+      if (Array.isArray(data)) {
+        const createdItems = data.map((itemData) => {
+          const foundItem = mockData.find((item) => item.id === itemData.id);
+          return { ...foundItem, ...data };
+        });
+        tempData = createdItems;
+        resolve(createdItems);
+      } else if (data.id) {
         const foundItem = mockData.find((item) => item.id === data.id);
         const mockItem = { ...foundItem, ...data };
         tempData = mockItem;
