@@ -71,10 +71,15 @@ export class OperationProfitLossController {
   }
 
   @Delete(':operation_profit_loss_id')
-  @ApiParam({ name: 'operation_profit_loss_id', required: true, type: 'number' })
+  @ApiQuery({
+    name: 'operation_profit_loss_id',
+    required: true,
+    type: 'number',
+    schema: { type: 'array', items: { type: 'number' } },
+  })
   deleteOperationProfitLoss(
-    @Param('operation_profit_loss_id') operation_profit_loss_id: number,
-  ): Promise<number> {
+    @Query('operation_profit_loss_id') operation_profit_loss_id: number | number[],
+  ): Promise<number | number[]> {
     return this.operationProfitLossService.delete(operation_profit_loss_id);
   }
 }

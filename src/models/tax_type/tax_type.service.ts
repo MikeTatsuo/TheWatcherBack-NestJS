@@ -52,7 +52,7 @@ export class TaxTypeService {
     return this.taxTypeRepository.save({ id, ...taxType });
   }
 
-  async delete(id: number): Promise<number> {
+  async delete(id: number | number[]): Promise<number | number[]> {
     return new Promise((resolve) => {
       this.taxTypeRepository.softDelete(id).then((response) => {
         resolve(response.affected);

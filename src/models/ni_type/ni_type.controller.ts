@@ -62,8 +62,13 @@ export class NiTypeController {
   }
 
   @Delete(':ni_type_id')
-  @ApiParam({ name: 'ni_type_id', required: true, type: 'number' })
-  deleteNiType(@Param('ni_type_id') ni_type_id: number): Promise<number> {
+  @ApiQuery({
+    name: 'ni_type_id',
+    required: true,
+    type: 'number',
+    schema: { type: 'array', items: { type: 'number' } },
+  })
+  deleteNiType(@Query('ni_type_id') ni_type_id: number | number[]): Promise<number | number[]> {
     return this.niTypeService.delete(ni_type_id);
   }
 }

@@ -108,7 +108,7 @@ export class AccountService {
     return this.accountRepository.save({ id, ...account });
   }
 
-  async delete(id: number): Promise<number> {
+  async delete(id: number | number[]): Promise<number | number[]> {
     return new Promise((resolve) => {
       this.accountRepository.softDelete(id).then((response) => {
         resolve(response.affected);

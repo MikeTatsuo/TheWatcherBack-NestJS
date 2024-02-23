@@ -194,7 +194,7 @@ export class BalanceService {
     return this.balanceRepository.save({ id, ...balance });
   }
 
-  async delete(id: number): Promise<number> {
+  async delete(id: number | number[]): Promise<number | number[]> {
     return new Promise((resolve) => {
       this.balanceRepository.softDelete(id).then((response) => {
         resolve(response.affected);

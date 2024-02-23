@@ -57,7 +57,7 @@ export class InstitutionTypeService {
     return this.institutionTypeRepository.save({ id, ...institutionType });
   }
 
-  async delete(id: number): Promise<number> {
+  async delete(id: number | number[]): Promise<number | number[]> {
     return new Promise((resolve) => {
       this.institutionTypeRepository.softDelete(id).then((response) => {
         resolve(response.affected);

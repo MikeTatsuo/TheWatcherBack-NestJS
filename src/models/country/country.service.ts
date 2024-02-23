@@ -61,7 +61,7 @@ export class CountryService {
     return this.countryRepository.save({ id, ...country });
   }
 
-  async delete(id: number): Promise<number> {
+  async delete(id: number | number[]): Promise<number | number[]> {
     return new Promise((resolve) => {
       this.countryRepository.softDelete(id).then((response) => {
         resolve(response.affected);

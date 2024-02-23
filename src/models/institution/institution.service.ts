@@ -109,7 +109,7 @@ export class InstitutionService {
     return this.institutionRepository.save({ id, ...institution });
   }
 
-  async delete(id: number): Promise<number> {
+  async delete(id: number | number[]): Promise<number | number[]> {
     return new Promise((resolve) => {
       this.institutionRepository.softDelete(id).then((response) => {
         resolve(response.affected);

@@ -97,8 +97,15 @@ export class AssetPriceController {
   }
 
   @Delete(':asset_price_id')
-  @ApiParam({ name: 'asset_price_id', required: true, type: 'number' })
-  deleteAssetPrice(@Param('asset_price_id') asset_price_id: number): Promise<number> {
+  @ApiQuery({
+    name: 'asset_price_id',
+    required: true,
+    type: 'number',
+    schema: { type: 'array', items: { type: 'number' } },
+  })
+  deleteAssetPrice(
+    @Query('asset_price_id') asset_price_id: number | number[],
+  ): Promise<number | number[]> {
     return this.assetPriceService.delete(asset_price_id);
   }
 }

@@ -137,7 +137,7 @@ export class AssetPriceService {
       .then(() => this.assetPriceRepository.findOneBy({ id }));
   }
 
-  async delete(id: number): Promise<number> {
+  async delete(id: number | number[]): Promise<number | number[]> {
     return new Promise((resolve) => {
       this.assetPriceRepository.softDelete(id).then((response) => {
         resolve(response.affected);

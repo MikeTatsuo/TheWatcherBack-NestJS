@@ -131,7 +131,7 @@ export class TaxesService {
     });
   }
 
-  async delete(id: number): Promise<number> {
+  async delete(id: number | number[]): Promise<number | number[]> {
     return new Promise((resolve) => {
       this.taxesRepository.softDelete(id).then((response) => {
         resolve(response.affected);

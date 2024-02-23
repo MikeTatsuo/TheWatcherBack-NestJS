@@ -79,8 +79,13 @@ export class AccountController {
   }
 
   @Delete(':account_id')
-  @ApiParam({ name: 'account_id', required: true, type: 'number' })
-  deleteAccount(@Param('account_id') account_id: number): Promise<number> {
+  @ApiQuery({
+    name: 'account_id',
+    required: true,
+    type: 'number',
+    schema: { type: 'array', items: { type: 'number' } },
+  })
+  deleteAccount(@Query('account_id') account_id: number | number[]): Promise<number | number[]> {
     return this.accountService.delete(account_id);
   }
 }

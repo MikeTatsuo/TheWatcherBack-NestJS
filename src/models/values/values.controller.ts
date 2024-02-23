@@ -66,8 +66,13 @@ export class ValuesController {
   }
 
   @Delete(':value_id')
-  @ApiParam({ name: 'value_id', required: true, type: 'number' })
-  deleteValue(@Param('value_id') value_id: number): Promise<number> {
+  @ApiQuery({
+    name: 'value_id',
+    required: true,
+    type: 'number',
+    schema: { type: 'array', items: { type: 'number' } },
+  })
+  deleteValue(@Query('value_id') value_id: number | number[]): Promise<number | number[]> {
     return this.valuesService.delete(value_id);
   }
 }

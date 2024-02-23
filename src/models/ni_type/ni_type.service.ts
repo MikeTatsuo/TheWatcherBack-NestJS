@@ -56,7 +56,7 @@ export class NiTypeService {
     return this.niTypeRepository.save({ id, ...niType });
   }
 
-  async delete(id: number): Promise<number> {
+  async delete(id: number | number[]): Promise<number | number[]> {
     return new Promise((resolve) => {
       this.niTypeRepository.softDelete(id).then((response) => {
         resolve(response.affected);

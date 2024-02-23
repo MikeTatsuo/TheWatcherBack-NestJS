@@ -98,7 +98,7 @@ export class ValuesService {
     return this.valuesRepository.save({ id, ...value });
   }
 
-  async delete(id: number): Promise<number> {
+  async delete(id: number | number[]): Promise<number | number[]> {
     return new Promise((resolve) => {
       this.valuesRepository.softDelete(id).then((response) => {
         resolve(response.affected);

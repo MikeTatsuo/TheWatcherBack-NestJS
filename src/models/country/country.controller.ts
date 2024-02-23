@@ -68,8 +68,13 @@ export class CountryController {
   }
 
   @Delete(':country_id')
-  @ApiParam({ name: 'country_id', required: true, type: 'number' })
-  deleteCountry(@Param('country_id') country_id: number): Promise<number> {
+  @ApiQuery({
+    name: 'country_id',
+    required: true,
+    type: 'number',
+    schema: { type: 'array', items: { type: 'number' } },
+  })
+  deleteCountry(@Query('country_id') country_id: number | number[]): Promise<number | number[]> {
     return this.countryService.delete(country_id);
   }
 }

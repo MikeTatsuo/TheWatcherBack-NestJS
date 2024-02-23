@@ -55,7 +55,7 @@ export class AssetTypeService {
     return this.assetTypeRepository.save({ id, ...assetType });
   }
 
-  async delete(id: number): Promise<number> {
+  async delete(id: number | number[]): Promise<number | number[]> {
     return new Promise((resolve) => {
       this.assetTypeRepository.softDelete(id).then((response) => {
         resolve(response.affected);

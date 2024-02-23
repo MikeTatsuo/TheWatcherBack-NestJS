@@ -115,7 +115,7 @@ export class OperationTypeService {
     return this.operationTypeRepository.save({ id, ...operationType });
   }
 
-  async delete(id: number): Promise<number> {
+  async delete(id: number | number[]): Promise<number | number[]> {
     return new Promise((resolve) => {
       this.operationTypeRepository.softDelete(id).then((response) => {
         resolve(response.affected);

@@ -65,10 +65,15 @@ export class InstitutionTypeController {
   }
 
   @Delete(':institution_type_id')
-  @ApiParam({ name: 'institution_type_id', required: true, type: 'number' })
+  @ApiQuery({
+    name: 'institution_type_id',
+    required: true,
+    type: 'number',
+    schema: { type: 'array', items: { type: 'number' } },
+  })
   deleteInstitutionType(
-    @Param('institution_type_id') institution_type_id: number,
-  ): Promise<number> {
+    @Query('institution_type_id') institution_type_id: number | number[],
+  ): Promise<number | number[]> {
     return this.institutionTypeService.delete(institution_type_id);
   }
 }

@@ -79,8 +79,13 @@ export class TaxesController {
   }
 
   @Delete(':tax_id')
-  @ApiParam({ name: 'tax_id', required: true, type: 'number' })
-  deleteTaxes(@Param('tax_id') tax_id: number): Promise<number> {
+  @ApiQuery({
+    name: 'tax_id',
+    required: true,
+    type: 'number',
+    schema: { type: 'array', items: { type: 'number' } },
+  })
+  deleteTaxes(@Query('tax_id') tax_id: number | number[]): Promise<number | number[]> {
     return this.taxesService.delete(tax_id);
   }
 }

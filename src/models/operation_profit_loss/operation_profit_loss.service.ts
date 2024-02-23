@@ -83,7 +83,7 @@ export class OperationProfitLossService {
     });
   }
 
-  async delete(id: number): Promise<number> {
+  async delete(id: number | number[]): Promise<number | number[]> {
     return new Promise((resolve) => {
       this.operationProfitLossRepository.softDelete(id).then((response) => {
         resolve(response.affected);

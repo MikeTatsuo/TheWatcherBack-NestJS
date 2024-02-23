@@ -77,8 +77,15 @@ export class INRegistryController {
   }
 
   @Delete(':in_registry_id')
-  @ApiParam({ name: 'in_registry_id', required: true, type: 'number' })
-  deleteINRegistry(@Param('in_registry_id') in_registry_id: number): Promise<number> {
+  @ApiQuery({
+    name: 'in_registry_id',
+    required: true,
+    type: 'number',
+    schema: { type: 'array', items: { type: 'number' } },
+  })
+  deleteINRegistry(
+    @Query('in_registry_id') in_registry_id: number | number[],
+  ): Promise<number | number[]> {
     return this.inRegistryService.delete(in_registry_id);
   }
 }

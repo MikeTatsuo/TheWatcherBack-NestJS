@@ -61,8 +61,15 @@ export class AssetTypeController {
   }
 
   @Delete(':asset_type_id')
-  @ApiParam({ name: 'asset_type_id', required: true, type: 'number' })
-  deleteAssetType(@Param('asset_type_id') asset_type_id: number): Promise<number> {
+  @ApiQuery({
+    name: 'asset_type_id',
+    required: true,
+    type: 'number',
+    schema: { type: 'array', items: { type: 'number' } },
+  })
+  deleteAssetType(
+    @Query('asset_type_id') asset_type_id: number | number[],
+  ): Promise<number | number[]> {
     return this.assetTypeService.delete(asset_type_id);
   }
 }

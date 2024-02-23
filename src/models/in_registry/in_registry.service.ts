@@ -86,7 +86,7 @@ export class INRegistryService {
     return this.inRegistryRepository.save({ id, ...inRegistry });
   }
 
-  async delete(id: number): Promise<number> {
+  async delete(id: number | number[]): Promise<number | number[]> {
     return new Promise((resolve) => {
       this.inRegistryRepository.softDelete(id).then((response) => {
         resolve(response.affected);

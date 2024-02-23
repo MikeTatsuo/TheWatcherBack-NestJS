@@ -120,8 +120,13 @@ export class BalanceController {
   }
 
   @Delete(':balance_id')
-  @ApiParam({ name: 'balance_id', required: true, type: 'number' })
-  deleteBalance(@Param('balance_id') balance_id: number): Promise<number> {
+  @ApiQuery({
+    name: 'balance_id',
+    required: true,
+    type: 'number',
+    schema: { type: 'array', items: { type: 'number' } },
+  })
+  deleteBalance(@Query('balance_id') balance_id: number | number[]): Promise<number | number[]> {
     return this.balanceService.delete(balance_id);
   }
 }

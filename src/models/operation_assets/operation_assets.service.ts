@@ -128,7 +128,7 @@ export class OperationAssetsService {
     return this.operationAssetsRepository.save({ id, ...operationAssets });
   }
 
-  async delete(id: number): Promise<number> {
+  async delete(id: number | number[]): Promise<number | number[]> {
     return new Promise((resolve) => {
       this.operationAssetsRepository.softDelete(id).then((response) => {
         resolve(response.affected);

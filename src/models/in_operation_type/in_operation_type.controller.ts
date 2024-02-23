@@ -73,10 +73,15 @@ export class INOperationTypeController {
   }
 
   @Delete(':in_operation_type_id')
-  @ApiParam({ name: 'in_operation_type_id', required: true, type: 'number' })
+  @ApiQuery({
+    name: 'in_operation_type_id',
+    required: true,
+    type: 'number',
+    schema: { type: 'array', items: { type: 'number' } },
+  })
   deleteINOperationType(
-    @Param('in_operation_type_id') in_operation_type_id: number,
-  ): Promise<number> {
+    @Query('in_operation_type_id') in_operation_type_id: number | number[],
+  ): Promise<number | number[]> {
     return this.inOperationTypeService.delete(in_operation_type_id);
   }
 }

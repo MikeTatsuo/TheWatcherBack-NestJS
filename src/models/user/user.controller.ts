@@ -59,8 +59,8 @@ export class UserController {
   }
 
   @Delete(':user_id')
-  @ApiParam({ name: 'user_id', required: true, type: 'number' })
-  deleteUser(@Param('user_id') user_id: number): Promise<number> {
+  @ApiQuery({ name: 'user_id', required: true, type: 'number' })
+  deleteUser(@Query('user_id') user_id: number): Promise<number> {
     return this.userService.delete(user_id);
   }
 }
