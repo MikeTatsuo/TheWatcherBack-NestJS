@@ -13,6 +13,9 @@ export class BalanceByAccountDTO {
   @ApiProperty({ type: 'string' })
   value: string;
 
+  @ApiProperty({ type: 'string' })
+  qtd: string;
+
   @ApiProperty({ type: 'string', format: 'date-time' })
   date: Date;
 }

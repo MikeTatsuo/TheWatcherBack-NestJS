@@ -172,15 +172,18 @@ export class BalanceService {
     operation_id: number,
     date: Date,
     operationValue: number,
+    operationQtd: number,
     asset_id: number,
     add: boolean,
   ): Promise<BalanceEntity> {
     const correctValue = ValueHelper.correctValue(operationValue, add);
+    const correctQtd = ValueHelper.correctValue(operationQtd, add);
 
     return this.getByAccountAndAsset(account_id, asset_id)
       .then((currentBalance) => {
         const value = parseFloat(currentBalance?.value ?? '0') + correctValue;
-        return this.valuesService.create({ asset_id, value });
+        const qtd = parseInt(currentBalance?.qtd ?? '0') + correctQtd;
+        return this.valuesService.create({ asset_id, value, qtd });
       })
       .then((valueEntity) =>
         this.create({ account_id, value_id: valueEntity.id, date, operation_id }),

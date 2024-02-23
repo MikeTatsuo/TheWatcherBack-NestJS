@@ -68,13 +68,14 @@ describe('ValuesController', () => {
   });
 
   describe('/values/by_id/:values_id - GET', () => {
-    const { id, value, asset_id } = faker.helpers.arrayElement(mockList);
+    const { id, value, qtd, asset_id } = faker.helpers.arrayElement(mockList);
 
     it(`should return values with id=${id}`, () => {
       return valuesController.getById(id).then((values) => {
         expect(values).not.toBeNull();
         expect(values).not.toBeUndefined();
         expect(values.value).toBe(value);
+        expect(values.qtd).toBe(qtd);
         expect(values.asset_id).toBe(asset_id);
         expect(values.id).toBe(id);
       });
@@ -112,6 +113,7 @@ describe('ValuesController', () => {
         expect(values).not.toBeNull();
         expect(values).not.toBeUndefined();
         expect(values.value).toBe(mockItem.value);
+        expect(values.qtd).toBe(mockItem.qtd);
         expect(values.asset_id).toBe(mockItem.asset_id);
         expect(values.id).toBe(mockLength);
       });
@@ -126,6 +128,7 @@ describe('ValuesController', () => {
         expect(values).not.toBeNull();
         expect(values).not.toBeUndefined();
         expect(values.value).toBe(mockItem.value);
+        expect(values.qtd).toBe(mockItem.qtd);
         expect(values.asset_id).toBe(mockItem.asset_id);
         expect(values.id).toBe(valueId);
       });
@@ -134,13 +137,25 @@ describe('ValuesController', () => {
 
   describe('/values/:values_id - PATCH', () => {
     const mockValues = faker.helpers.arrayElement(mockList);
-    const { value, asset_id } = mockItem;
+    const { value, qtd, asset_id } = mockItem;
 
     it(`should partially update value with id=${mockValues.id} - only value`, () => {
       return valuesController.partialUpdateValue(mockValues.id, { value }).then((values) => {
         expect(values).not.toBeNull();
         expect(values).not.toBeUndefined();
         expect(values.value).toBe(value);
+        expect(values.qtd).toBe(mockValues.qtd);
+        expect(values.asset_id).toBe(mockValues.asset_id);
+        expect(values.id).toBe(mockValues.id);
+      });
+    });
+
+    it(`should partially update value with id=${mockValues.id} - only qtd`, () => {
+      return valuesController.partialUpdateValue(mockValues.id, { qtd }).then((values) => {
+        expect(values).not.toBeNull();
+        expect(values).not.toBeUndefined();
+        expect(values.value).toBe(mockValues.value);
+        expect(values.qtd).toBe(qtd);
         expect(values.asset_id).toBe(mockValues.asset_id);
         expect(values.id).toBe(mockValues.id);
       });
@@ -151,6 +166,7 @@ describe('ValuesController', () => {
         expect(values).not.toBeNull();
         expect(values).not.toBeUndefined();
         expect(values.value).toBe(mockValues.value);
+        expect(values.qtd).toBe(mockValues.qtd);
         expect(values.asset_id).toBe(asset_id);
         expect(values.id).toBe(mockValues.id);
       });

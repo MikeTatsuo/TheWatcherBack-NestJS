@@ -114,9 +114,10 @@ export class OperationAssetsService {
     positive: boolean,
   ): Promise<OperationAssetsEntity> {
     const value = ValueHelper.correctValue(valueToCreate.value, positive);
+    const qtd = ValueHelper.correctQtd(valueToCreate.qtd, positive);
 
     return this.valuesService
-      .create({ ...valueToCreate, value })
+      .create({ ...valueToCreate, value, qtd })
       .then(({ id }) => this.operationAssetsRepository.save({ operation_id, value_id: id }));
   }
 

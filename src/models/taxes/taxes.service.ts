@@ -103,9 +103,9 @@ export class TaxesService {
     });
   }
 
-  async create({ value, asset_id, ...taxes }: TaxesDTO): Promise<TaxesEntity> {
+  async create({ value, qtd, asset_id, ...taxes }: TaxesDTO): Promise<TaxesEntity> {
     return new Promise((resolve) => {
-      this.valuesService.create({ asset_id, value }).then(({ id: value_id }) => {
+      this.valuesService.create({ asset_id, value, qtd }).then(({ id: value_id }) => {
         resolve(this.taxesRepository.save({ ...taxes, value_id }));
       });
     });
@@ -113,7 +113,7 @@ export class TaxesService {
 
   async update(
     id: number,
-    { value, asset_id, ...taxes }: Partial<TaxesDTO> | TaxesDTO,
+    { value, asset_id, qtd, ...taxes }: Partial<TaxesDTO> | TaxesDTO,
   ): Promise<TaxesEntity> {
     return new Promise((resolve) => {
       this.taxesRepository
@@ -122,6 +122,7 @@ export class TaxesService {
           const valueData = {};
           if (value) Object.assign(valueData, { ...valueData, value });
           if (asset_id) Object.assign(valueData, { ...valueData, asset_id });
+          if (qtd) Object.assign(valueData, { ...valueData, qtd });
           return this.valuesService.update(tax.value_id, valueData);
         })
         .then(() => {

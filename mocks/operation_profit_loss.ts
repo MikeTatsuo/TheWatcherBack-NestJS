@@ -13,4 +13,5 @@ export const createOperationProfitLossMock = () => ({
   operation_id: faker.number.int(),
   value: faker.number.float(),
   asset_id: faker.number.int(),
+  qtd: faker.number.int(),
 });

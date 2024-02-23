@@ -13,6 +13,9 @@ export class UpdateBalanceDTO {
   @ApiProperty({ type: 'number' })
   value: number;
 
+  @ApiProperty({ type: 'number' })
+  qtd: number;
+
   @ApiProperty({ type: 'string', format: 'date-time' })
   date: Date;
 

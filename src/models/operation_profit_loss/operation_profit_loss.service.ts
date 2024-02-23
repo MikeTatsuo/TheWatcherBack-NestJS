@@ -60,9 +60,10 @@ export class OperationProfitLossService {
     operation_id,
     asset_id,
     value,
+    qtd,
   }: OperationProfitLossDTO): Promise<OperationProfitLossEntity> {
     return new Promise((resolve) => {
-      this.valuesService.create({ asset_id, value }).then(({ id: value_id }) => {
+      this.valuesService.create({ asset_id, value, qtd }).then(({ id: value_id }) => {
         resolve(this.operationProfitLossRepository.save({ value_id, operation_id }));
       });
     });

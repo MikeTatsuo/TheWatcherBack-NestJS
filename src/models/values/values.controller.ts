@@ -47,7 +47,7 @@ export class ValuesController {
 
   @Post()
   @ApiBody({ required: true, type: ValuesDTO })
-  createValue(@Body() value: Partial<ValuesDTO>): Promise<ValuesEntity> {
+  createValue(@Body() value: ValuesDTO): Promise<ValuesEntity> {
     return this.valuesService.create(value);
   }
 

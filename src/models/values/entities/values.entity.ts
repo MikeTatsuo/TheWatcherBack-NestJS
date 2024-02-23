@@ -15,6 +15,10 @@ export class ValuesEntity extends AbstractEntity {
   @IsNumber()
   value: number;
 
+  @Column({ nullable: true })
+  @IsNumber()
+  qtd: number;
+
   @ManyToOne(() => AssetsEntity, (asset) => asset.id)
   @JoinColumn([{ name: 'asset_id', referencedColumnName: 'id' }])
   asset: AssetsEntity;

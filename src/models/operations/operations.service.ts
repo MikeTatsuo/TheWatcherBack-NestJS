@@ -176,6 +176,7 @@ export class OperationsService {
               createdOp.id,
               operation.date,
               value_in.value,
+              value_in.qtd,
               value_in.asset_id,
               true,
             );
@@ -188,6 +189,7 @@ export class OperationsService {
               createdOp.id,
               operation.date,
               value_out.value,
+              value_out.qtd,
               value_out.asset_id,
               false,
             );

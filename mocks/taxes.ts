@@ -14,4 +14,5 @@ export const createTaxesMock = () => ({
   operation_id: faker.number.int(),
   asset_id: faker.number.int(),
   value: faker.number.float(),
+  qtd: faker.number.int(),
 });

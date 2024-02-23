@@ -92,9 +92,17 @@ export class BalanceController {
   @Post('/update_by_account')
   @ApiBody({ required: true, type: UpdateBalanceDTO })
   updateAccountBalance(
-    @Body() { account_id, add, date, operation_id, asset_id, value }: UpdateBalanceDTO,
+    @Body() { account_id, add, date, operation_id, asset_id, value, qtd }: UpdateBalanceDTO,
   ): Promise<BalanceEntity> {
-    return this.balanceService.updateBalance(account_id, operation_id, date, value, asset_id, add);
+    return this.balanceService.updateBalance(
+      account_id,
+      operation_id,
+      date,
+      value,
+      qtd,
+      asset_id,
+      add,
+    );
   }
 
   @Put(':balance_id')

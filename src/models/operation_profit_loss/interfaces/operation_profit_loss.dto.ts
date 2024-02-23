@@ -9,4 +9,7 @@ export class OperationProfitLossDTO {
 
   @ApiProperty({ type: 'number' })
   value: number;
+
+  @ApiProperty({ type: 'number' })
+  qtd: number;
 }

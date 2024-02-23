@@ -114,9 +114,9 @@ export class AssetPriceService {
     return this.assetPriceRepository.findOneBy({ value: { asset: { ticker } }, date });
   }
 
-  async create({ asset_id, date, value }: AssetPriceDTO): Promise<AssetPriceEntity> {
+  async create({ asset_id, date, value, qtd }: AssetPriceDTO): Promise<AssetPriceEntity> {
     return this.valueService
-      .create({ asset_id, value })
+      .create({ asset_id, value, qtd })
       .then(({ id }) => this.assetPriceRepository.save({ value_id: id, date }));
   }
 

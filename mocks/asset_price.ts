@@ -12,4 +12,5 @@ export const createAssetPriceMock = () => ({
   date: faker.date.recent(),
   asset_id: faker.number.int(),
   value: faker.number.float(),
+  qtd: faker.number.int(),
 });
