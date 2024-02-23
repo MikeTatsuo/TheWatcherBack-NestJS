@@ -31,6 +31,7 @@ module.exports = {
       'error',
       2,
       {
+        SwitchCase: 1,
         ignoredNodes: ['PropertyDefinition', 'FunctionExpression > .params[decorators.length > 0]'],
       },
     ],
