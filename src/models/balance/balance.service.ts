@@ -75,7 +75,7 @@ export class BalanceService {
         .select(['balance.id as id', 'ticker', 'asset', 'value', 'balance.date as date'])
         .leftJoin('balance.value', 'values', 'values.id = balance.value_id')
         .leftJoin('values.asset', 'assets', 'assets.id = values.asset_id')
-        .where('balance.account_id = :account_id', { account_id })
+        .where('account_id = :account_id', { account_id })
         .orderBy('values.asset_id')
         .distinctOn(['values.asset_id'])
         .addOrderBy('balance.date', Order.DESC)
@@ -102,8 +102,28 @@ export class BalanceService {
       .select(['balance.id as id', 'ticker', 'asset', 'value', 'balance.date as date'])
       .leftJoin('balance.value', 'values', 'values.id = balance.value_id')
       .leftJoin('values.asset', 'assets', 'assets.id = values.asset_id')
-      .where('balance.account_id = :account_id', { account_id })
+      .where('account_id = :account_id', { account_id })
       .andWhere('assets.id = :id', { id: asset_id })
+      .orderBy('values.asset_id')
+      .distinctOn(['values.asset_id'])
+      .addOrderBy('balance.date', Order.DESC)
+      .getRawOne();
+  }
+
+  async getByAccountAssetAndDate(
+    account_id: number,
+    asset_id: number,
+    date: Date,
+  ): Promise<BalanceByAccountDTO> {
+    const query = this.balanceRepository.createQueryBuilder('balance');
+
+    return query
+      .select(['balance.id as id', 'ticker', 'asset', 'value', 'balance.date as date'])
+      .leftJoin('balance.value', 'values', 'values.id = balance.value_id')
+      .leftJoin('values.asset', 'assets', 'assets.id = values.asset_id')
+      .where('account_id = :account_id', { account_id })
+      .andWhere('assets.id = :id', { id: asset_id })
+      .andWhere('date > :date', { date })
       .orderBy('values.asset_id')
       .distinctOn(['values.asset_id'])
       .addOrderBy('balance.date', Order.DESC)

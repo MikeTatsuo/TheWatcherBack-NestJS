@@ -47,14 +47,26 @@ export class BalanceController {
     return this.balanceService.getByAccount(account_id, paginationOptions);
   }
 
-  @Get('by_account_and_asset/:account_id/:asset_id')
+  @Get('by_account_and_asset/:account_id')
   @ApiParam({ name: 'account_id', required: true, type: 'number' })
-  @ApiParam({ name: 'asset_id', required: true, type: 'number' })
-  getBgetByAccountAndTickeryAccount(
+  @ApiQuery({ name: 'asset_id', required: true, type: 'number' })
+  getByAccountAndTicker(
     @Param('account_id') account_id: number,
-    @Param('asset_id') asset_id: number,
+    @Query('asset_id') asset_id: number,
   ): Promise<BalanceByAccountDTO> {
     return this.balanceService.getByAccountAndAsset(account_id, asset_id);
+  }
+
+  @Get('by_account_asset_and_date/:account_id')
+  @ApiParam({ name: 'account_id', required: true, type: 'number' })
+  @ApiQuery({ name: 'asset_id', required: true, type: 'number' })
+  @ApiQuery({ name: 'date', required: true, type: 'Date' })
+  getByAccountTickerAndDate(
+    @Param('account_id') account_id: number,
+    @Query('asset_id') asset_id: number,
+    @Query('date') date: Date,
+  ): Promise<BalanceByAccountDTO> {
+    return this.balanceService.getByAccountAssetAndDate(account_id, asset_id, date);
   }
 
   @Get('by_date/:date')

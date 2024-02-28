@@ -8,4 +8,7 @@ export const balanceMock = () => ({
   value_id: faker.number.int(),
   date: faker.date.recent(),
   operation_id: faker.number.int(),
+  assets: {
+    id: faker.number.int(),
+  },
 });

@@ -116,6 +116,34 @@ describe('BalanceController', () => {
     });
   });
 
+  describe('/balance/by_account_and_asset/:account_id - GET', () => {
+    const { id, account_id, date, assets } = faker.helpers.arrayElement(mockList);
+
+    it(`should return page 1 of balances with account_id=${account_id} and asset_id=${assets.id}`, () => {
+      return balanceController.getByAccountAndTicker(account_id, assets.id).then((balance) => {
+        expect(balance).not.toBeNull();
+        expect(balance).not.toBeUndefined();
+        expect(balance.date).toBe(date);
+        expect(balance.id).toBe(id);
+      });
+    });
+  });
+
+  describe('/balance/by_account_asset_and_date/:account_id - GET', () => {
+    const { id, account_id, date, assets } = faker.helpers.arrayElement(mockList);
+
+    it(`should return page 1 of balances with account_id=${account_id}, asset_id=${assets.id} and date=${date}`, () => {
+      return balanceController
+        .getByAccountTickerAndDate(account_id, assets.id, date)
+        .then((balance) => {
+          expect(balance).not.toBeNull();
+          expect(balance).not.toBeUndefined();
+          expect(balance.date).toBe(date);
+          expect(balance.id).toBe(id);
+        });
+    });
+  });
+
   describe('/balance/by_date/:date - GET', () => {
     const { date } = faker.helpers.arrayElement(mockList);
     const sampleLength = mockList.filter((item) => item.date === date).length;
