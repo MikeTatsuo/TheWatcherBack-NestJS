@@ -32,6 +32,7 @@ module.exports = {
       2,
       {
         SwitchCase: 1,
+        flatTernaryExpressions: false,
         ignoredNodes: ['PropertyDefinition', 'FunctionExpression > .params[decorators.length > 0]'],
       },
     ],
