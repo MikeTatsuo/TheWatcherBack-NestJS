@@ -7,4 +7,7 @@ export const ValueHelper = {
     const inverter = (qtd >= 0 && positive) || (qtd < 0 && !positive) ? 1 : -1;
     return qtd * inverter;
   },
+  getValueByQtd: (qtd: number, balance_qtd: number, balance_value: number) => {
+    return (qtd * balance_value) / balance_qtd;
+  },
 };

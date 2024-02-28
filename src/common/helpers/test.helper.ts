@@ -26,12 +26,22 @@ const createQueryBuilder = (mockData) => ({
     return createQueryBuilder(data);
   }),
   where: jest.fn().mockImplementation((conditional: string, value: Record<string, unknown>) => {
-    const data = tempData ?? mockData;
-    const filteredMockData = data.filter((item) => {
-      let correspond = true;
+    const splitedConditional = conditional.split(' ');
+    const data = mockData;
+    const isEqual = splitedConditional.at(1) === '=';
+    const isBiggerThen = splitedConditional.at(1) === '>';
+    const keys = splitedConditional.at(0).split('.');
 
-      Object.entries(value).forEach(([key, value]) => {
-        correspond = correspond && item[key] === value;
+    const filteredMockData = (Array.isArray(data) ? data : [data]).filter((item) => {
+      let correspond = true;
+      let it = item;
+
+      keys.forEach((key) => {
+        it = it[key];
+      });
+
+      Object.values(value).forEach((val) => {
+        correspond = correspond && (isEqual ? it === val : isBiggerThen ? it > val : it < val);
       });
 
       return correspond;
@@ -40,10 +50,42 @@ const createQueryBuilder = (mockData) => ({
     tempData = filteredMockData;
     return createQueryBuilder(filteredMockData);
   }),
+  andWhere: jest.fn().mockImplementation((conditional: string, value: Record<string, unknown>) => {
+    const splitedConditional = conditional.split(' ');
+    const data = tempData ?? mockData;
+    const isEqual = splitedConditional.at(1) === '=';
+    const isBiggerThen = splitedConditional.at(1) === '>';
+    const keys = splitedConditional.at(0).split('.');
+
+    const filteredMockData = (Array.isArray(data) ? data : [data]).filter((item) => {
+      let correspond = true;
+      let it = item;
+
+      keys.forEach((key) => {
+        it = it[key];
+      });
+
+      Object.values(value).forEach((val) => {
+        correspond = correspond && (isEqual ? it === val : isBiggerThen ? it >= val : it <= val);
+      });
+
+      return correspond;
+    });
+
+    tempData = filteredMockData;
+
+    return createQueryBuilder(filteredMockData);
+  }),
   getRawMany: jest.fn().mockImplementationOnce(() => {
     const data = tempData ?? mockData;
     tempData = data;
     return data;
+  }),
+  getRawOne: jest.fn().mockImplementationOnce(() => {
+    const data = tempData ?? mockData;
+    if (Array.isArray(data)) tempData = data.shift();
+    else tempData = data;
+    return tempData;
   }),
   getCount: jest.fn().mockImplementation(() => {
     const data = tempData ?? mockData;
