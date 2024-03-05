@@ -11,14 +11,13 @@ let tempData = undefined;
 const createQueryBuilder = (mockData) => ({
   data: undefined,
   select: jest.fn().mockImplementation(() => {
-    const data = tempData ?? mockData;
-    tempData = data;
-    return createQueryBuilder(data);
+    tempData = mockData;
+    return createQueryBuilder(mockData);
   }),
   addSelect: jest.fn().mockImplementation(() => {
     const data = tempData ?? mockData;
     tempData = data;
-    return createQueryBuilder(data);
+    return createQueryBuilder(mockData);
   }),
   groupBy: jest.fn().mockImplementation(() => {
     const data = tempData ?? mockData;
@@ -52,7 +51,7 @@ const createQueryBuilder = (mockData) => ({
   }),
   andWhere: jest.fn().mockImplementation((conditional: string, value: Record<string, unknown>) => {
     const splitedConditional = conditional.split(' ');
-    const data = tempData ?? mockData;
+    const data = tempData;
     const isEqual = splitedConditional.at(1) === '=';
     const isBiggerThen = splitedConditional.at(1) === '>';
     const keys = splitedConditional.at(0).split('.');
@@ -72,8 +71,7 @@ const createQueryBuilder = (mockData) => ({
       return correspond;
     });
 
-    tempData = filteredMockData;
-
+    tempData = filteredMockData ?? mockData;
     return createQueryBuilder(filteredMockData);
   }),
   getRawMany: jest.fn().mockImplementationOnce(() => {
