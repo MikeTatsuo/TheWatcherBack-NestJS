@@ -9,8 +9,8 @@ import { BalanceService } from '@/models/balance/balance.service';
 import { OperationAssetsService } from '@/models/operation_assets/operation_assets.service';
 
 import { OperationsEntity } from '@/models/operations/entities/operations.entity';
-import { OperationsDTO } from '@/models/operations/interfaces/operations.dto';
 import { CreateOperationsDTO } from '@/models/operations/interfaces/create-operations.dto';
+import { UpdateOperationsDTO } from './interfaces/update-operations.dto';
 
 @Injectable()
 export class OperationsService {
@@ -171,28 +171,28 @@ export class OperationsService {
         .then((createdOp) => {
           if (value_in) {
             this.operationAssetsService.createOperationValue(value_in, createdOp.id, true);
-            this.balanceService.updateBalance(
-              operation.account_id,
-              createdOp.id,
-              operation.date,
-              value_in.value,
-              value_in.qtd,
-              value_in.asset_id,
-              true,
-            );
+            this.balanceService.updateBalance({
+              account_id: operation.account_id,
+              operation_id: createdOp.id,
+              date: operation.date,
+              value: value_in.value,
+              qtd: value_in.qtd,
+              asset_id: value_in.asset_id,
+              add: true,
+            });
           }
 
           if (value_out) {
             this.operationAssetsService.createOperationValue(value_out, createdOp.id, false);
-            this.balanceService.updateBalance(
-              operation.account_id,
-              createdOp.id,
-              operation.date,
-              value_out.value,
-              value_out.qtd,
-              value_out.asset_id,
-              false,
-            );
+            this.balanceService.updateBalance({
+              account_id: operation.account_id,
+              operation_id: createdOp.id,
+              date: operation.date,
+              value: value_out.value,
+              qtd: value_out.qtd,
+              asset_id: value_out.asset_id,
+              add: false,
+            });
           }
           return createdOp;
         })
@@ -205,7 +205,7 @@ export class OperationsService {
 
   async update(
     id: number,
-    operation: Partial<OperationsDTO> | OperationsDTO,
+    operation: Partial<UpdateOperationsDTO> | UpdateOperationsDTO,
   ): Promise<OperationsEntity> {
     return this.operationsRepository.save({ id, ...operation });
   }
