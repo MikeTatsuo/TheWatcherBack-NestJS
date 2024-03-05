@@ -12,3 +12,13 @@ export const balanceMock = () => ({
     id: faker.number.int(),
   },
 });
+
+export const updateBalanceMock = () => ({
+  operation_id: faker.number.int(),
+  account_id: faker.number.int(),
+  asset_id: faker.number.int(),
+  value: faker.number.float(),
+  qtd: faker.number.int(),
+  date: faker.date.recent(),
+  add: faker.datatype.boolean(),
+});

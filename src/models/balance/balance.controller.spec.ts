@@ -2,7 +2,7 @@ import { Test, TestingModule } from '@nestjs/testing';
 import { getRepositoryToken } from '@nestjs/typeorm';
 import { faker } from '@faker-js/faker';
 
-import { balanceMock } from '@Mocks/balance';
+import { balanceMock, updateBalanceMock } from '@Mocks/balance';
 
 import { PaginationOptionsDTO } from '@/common/dtos/pagination_options.dto';
 import { TestHelper } from '@/common/helpers/test.helper';
@@ -19,6 +19,7 @@ import { BalanceEntity } from '@/models/balance/entities/balance.entity';
 
 const mockList = MockHelper.generateList(balanceMock, ['account_id', 'value_id', 'operation_id']);
 const mockItem = balanceMock();
+const updateMockItem = updateBalanceMock();
 const useValue = TestHelper(mockList);
 const mockLength = mockList.length;
 const paginationData = new PaginationOptionsDTO();
@@ -209,23 +210,23 @@ describe('BalanceController', () => {
   });
 
   describe('/balance/:balance_id - PUT', () => {
-    const { id } = faker.helpers.arrayElement(mockList);
-    it(`should update balance with id=${id}`, () => {
-      return balanceController.updateBalance(id, mockItem).then((balance) => {
+    const mockListItem = faker.helpers.arrayElement(mockList);
+    it(`should update balance with id=${mockListItem.id}`, () => {
+      return balanceController.updateBalance(mockListItem.id, updateMockItem).then((balance) => {
         expect(balance).not.toBeNull();
         expect(balance).not.toBeUndefined();
-        expect(balance.account_id).toBe(mockItem.account_id);
-        expect(balance.value_id).toBe(mockItem.value_id);
-        expect(balance.date).toBe(mockItem.date);
-        expect(balance.operation_id).toBe(mockItem.operation_id);
-        expect(balance.id).toBe(id);
+        expect(balance.account_id).toBe(mockListItem.account_id);
+        expect(balance.value_id).toBe(mockListItem.value_id);
+        expect(balance.date).toBe(mockListItem.date);
+        expect(balance.operation_id).toBe(mockListItem.operation_id);
+        expect(balance.id).toBe(mockListItem.id);
       });
     });
   });
 
   describe('/balance/:balance_id - PATCH', () => {
     const mockBalance = faker.helpers.arrayElement(mockList);
-    const { account_id, value_id, date, operation_id } = mockItem;
+    const { account_id, date, operation_id, asset_id, value, qtd } = updateMockItem;
 
     it(`should partially update balance with id=${mockBalance.id} - only account_id`, () => {
       return balanceController
@@ -233,7 +234,7 @@ describe('BalanceController', () => {
         .then((balance) => {
           expect(balance).not.toBeNull();
           expect(balance).not.toBeUndefined();
-          expect(balance.account_id).toBe(account_id);
+          expect(balance.account_id).toBe(mockBalance.account_id);
           expect(balance.value_id).toBe(mockBalance.value_id);
           expect(balance.date).toBe(mockBalance.date);
           expect(balance.operation_id).toBe(mockBalance.operation_id);
@@ -241,18 +242,16 @@ describe('BalanceController', () => {
         });
     });
 
-    it(`should partially update balance with id=${mockBalance.id} - only value_id`, () => {
-      return balanceController
-        .partialUpdateBalance(mockBalance.id, { value_id })
-        .then((balance) => {
-          expect(balance).not.toBeNull();
-          expect(balance).not.toBeUndefined();
-          expect(balance.account_id).toBe(mockBalance.account_id);
-          expect(balance.value_id).toBe(value_id);
-          expect(balance.date).toBe(mockBalance.date);
-          expect(balance.operation_id).toBe(mockBalance.operation_id);
-          expect(balance.id).toBe(mockBalance.id);
-        });
+    it(`should partially update balance with id=${mockBalance.id} - only value`, () => {
+      return balanceController.partialUpdateBalance(mockBalance.id, { value }).then((balance) => {
+        expect(balance).not.toBeNull();
+        expect(balance).not.toBeUndefined();
+        expect(balance.account_id).toBe(mockBalance.account_id);
+        expect(balance.value_id).toBe(mockBalance.value_id);
+        expect(balance.date).toBe(mockBalance.date);
+        expect(balance.operation_id).toBe(mockBalance.operation_id);
+        expect(balance.id).toBe(mockBalance.id);
+      });
     });
 
     it(`should partially update balance with id=${mockBalance.id} - only date`, () => {
@@ -261,10 +260,24 @@ describe('BalanceController', () => {
         expect(balance).not.toBeUndefined();
         expect(balance.account_id).toBe(mockBalance.account_id);
         expect(balance.value_id).toBe(mockBalance.value_id);
-        expect(balance.date).toBe(date);
+        expect(balance.date).toBe(mockBalance.date);
         expect(balance.operation_id).toBe(mockBalance.operation_id);
         expect(balance.id).toBe(mockBalance.id);
       });
+    });
+
+    it(`should partially update balance with id=${mockBalance.id} - only asset_id`, () => {
+      return balanceController
+        .partialUpdateBalance(mockBalance.id, { asset_id })
+        .then((balance) => {
+          expect(balance).not.toBeNull();
+          expect(balance).not.toBeUndefined();
+          expect(balance.account_id).toBe(mockBalance.account_id);
+          expect(balance.value_id).toBe(mockBalance.value_id);
+          expect(balance.date).toBe(mockBalance.date);
+          expect(balance.operation_id).toBe(mockBalance.operation_id);
+          expect(balance.id).toBe(mockBalance.id);
+        });
     });
 
     it(`should partially update balance with id=${mockBalance.id} - only operation_id`, () => {
@@ -276,9 +289,21 @@ describe('BalanceController', () => {
           expect(balance.account_id).toBe(mockBalance.account_id);
           expect(balance.value_id).toBe(mockBalance.value_id);
           expect(balance.date).toBe(mockBalance.date);
-          expect(balance.operation_id).toBe(operation_id);
+          expect(balance.operation_id).toBe(mockBalance.operation_id);
           expect(balance.id).toBe(mockBalance.id);
         });
+    });
+
+    it(`should partially update balance with id=${mockBalance.id} - only qtd`, () => {
+      return balanceController.partialUpdateBalance(mockBalance.id, { qtd }).then((balance) => {
+        expect(balance).not.toBeNull();
+        expect(balance).not.toBeUndefined();
+        expect(balance.account_id).toBe(mockBalance.account_id);
+        expect(balance.value_id).toBe(mockBalance.value_id);
+        expect(balance.date).toBe(mockBalance.date);
+        expect(balance.operation_id).toBe(mockBalance.operation_id);
+        expect(balance.id).toBe(mockBalance.id);
+      });
     });
   });
 

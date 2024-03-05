@@ -12,6 +12,7 @@ import { ValuesService } from '@/models/values/values.service';
 import { BalanceEntity } from '@/models/balance/entities/balance.entity';
 import { BalanceDTO } from '@/models/balance/interfaces/balance.dto';
 import { BalanceByAccountDTO } from '@/models/balance/interfaces/balance-by-account.dto';
+import { UpdateBalanceDTO } from './interfaces/update-balance.dto';
 
 const relations = ['account', 'value', 'value.asset', 'value.asset.asset_type'];
 const select = {
@@ -187,17 +188,17 @@ export class BalanceService {
     return this.balanceRepository.save(balance);
   }
 
-  async updateBalance(
-    account_id: number,
-    operation_id: number,
-    date: Date,
-    operationValue: number,
-    operationQtd: number,
-    asset_id: number,
-    add: boolean,
-  ): Promise<BalanceEntity> {
-    const correctValue = ValueHelper.correctValue(operationValue, add);
-    const correctQtd = ValueHelper.correctValue(operationQtd, add);
+  async updateBalance({
+    account_id,
+    operation_id,
+    date,
+    value,
+    qtd,
+    asset_id,
+    add,
+  }: UpdateBalanceDTO): Promise<BalanceEntity> {
+    const correctValue = ValueHelper.correctValue(value, add);
+    const correctQtd = ValueHelper.correctValue(qtd, add);
 
     return this.getByAccountAndAsset(account_id, asset_id)
       .then((currentBalance) => {
@@ -210,8 +211,34 @@ export class BalanceService {
       );
   }
 
-  async update(id: number, balance: Partial<BalanceDTO> | BalanceDTO): Promise<BalanceEntity> {
-    return this.balanceRepository.save({ id, ...balance });
+  async update(
+    id: number,
+    { account_id, operation_id, date, value, qtd, asset_id }: Partial<UpdateBalanceDTO>,
+  ): Promise<BalanceEntity> {
+    return this.getById(id)
+      .then((currentBalance) => {
+        const promises = [];
+        if (value || qtd || asset_id) {
+          const valueData = {};
+          if (value) Object.assign(valueData, { value });
+          if (qtd) Object.assign(valueData, { ...valueData, qtd });
+          if (asset_id) Object.assign(valueData, { ...valueData, asset_id });
+
+          promises.push(this.valuesService.update(currentBalance.value_id, valueData));
+        }
+
+        if (account_id || operation_id || date) {
+          const balanceData = {};
+          if (account_id) Object.assign(balanceData, { account_id });
+          if (operation_id) Object.assign(balanceData, { ...balanceData, operation_id });
+          if (date) Object.assign(balanceData, { ...balanceData, date });
+
+          promises.push(this.balanceRepository.save({ id, ...balanceData }));
+        }
+
+        return Promise.all([Promise.resolve(id), ...promises]);
+      })
+      .then(([balanceId, ..._rest]) => this.getById(balanceId));
   }
 
   async delete(id: number | number[]): Promise<number | number[]> {

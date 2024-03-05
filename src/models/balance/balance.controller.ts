@@ -106,7 +106,7 @@ export class BalanceController {
   updateAccountBalance(
     @Body() { account_id, add, date, operation_id, asset_id, value, qtd }: UpdateBalanceDTO,
   ): Promise<BalanceEntity> {
-    return this.balanceService.updateBalance(
+    return this.balanceService.updateBalance({
       account_id,
       operation_id,
       date,
@@ -114,20 +114,20 @@ export class BalanceController {
       qtd,
       asset_id,
       add,
-    );
+    });
   }
 
   @Put(':balance_id')
-  @ApiBody({ required: true, type: BalanceDTO })
+  @ApiBody({ required: true, type: UpdateBalanceDTO })
   @ApiParam({ name: 'balance_id', required: true, type: 'number' })
-  updateBalance(@Param() balance_id: number, @Body() balance: BalanceDTO) {
+  updateBalance(@Param() balance_id: number, @Body() balance: UpdateBalanceDTO) {
     return this.balanceService.update(balance_id, balance);
   }
 
   @Patch(':balance_id')
-  @ApiBody({ required: true, type: BalanceDTO })
+  @ApiBody({ required: true, type: UpdateBalanceDTO })
   @ApiParam({ name: 'balance_id', required: true, type: 'number' })
-  partialUpdateBalance(@Param() balance_id: number, @Body() balance: Partial<BalanceDTO>) {
+  partialUpdateBalance(@Param() balance_id: number, @Body() balance: Partial<UpdateBalanceDTO>) {
     return this.balanceService.update(balance_id, balance);
   }
 
