@@ -6,16 +6,16 @@ import { TransfersController } from './transfers.controller';
 import { TransfersService } from './transfers.service';
 import { BalanceModule } from '../balance/balance.module';
 import { OperationsModule } from '../operations/operations.module';
-import { ValuesService } from '../values/values.service';
-import { OperationAssetsService } from '../operation_assets/operation_assets.service';
+import { OperationAssetsModule } from '../operation_assets/operation_assets.module';
+import { ValuesModule } from '../values/values.module';
 
 @Module({
   imports: [
     TypeOrmModule.forFeature([TransfersEntity]),
     BalanceModule,
     OperationsModule,
-    OperationAssetsService,
-    ValuesService,
+    OperationAssetsModule,
+    ValuesModule,
   ],
   controllers: [TransfersController],
   providers: [TransfersService],

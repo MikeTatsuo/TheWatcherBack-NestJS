@@ -12,6 +12,6 @@ import { OperationsService } from '@/models/operations/operations.service';
   imports: [TypeOrmModule.forFeature([OperationsEntity]), BalanceModule, OperationAssetsModule],
   controllers: [OperationsController],
   providers: [OperationsService],
-  exports: [TypeOrmModule],
+  exports: [TypeOrmModule, OperationsService],
 })
 export class OperationsModule {}
