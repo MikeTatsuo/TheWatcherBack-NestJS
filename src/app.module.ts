@@ -27,6 +27,7 @@ import { OperationProfitLossModule } from '@/models/operation_profit_loss/operat
 import { BalanceModule } from '@/models/balance/balance.module';
 import { PtaxModule } from '@/models/ptax/ptax.module';
 import { AssetPriceModule } from '@/models/asset_price/asset_price.module';
+import { TransferModule } from './models/transfers/transfers.module';
 
 @Module({
   imports: [
@@ -67,6 +68,7 @@ import { AssetPriceModule } from '@/models/asset_price/asset_price.module';
     PtaxModule,
     TaxTypeModule,
     TaxesModule,
+    TransferModule,
     UserModule,
     ValuesModule,
   ],
