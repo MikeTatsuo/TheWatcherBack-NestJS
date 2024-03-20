@@ -51,6 +51,12 @@ export class ValuesController {
     return this.valuesService.create(value);
   }
 
+  @Post('/batch')
+  @ApiBody({ required: true, type: ValuesDTO, isArray: true })
+  batchCreateValue(@Body() value: ValuesDTO[]): Promise<ValuesEntity[]> {
+    return this.valuesService.batchCreate(value);
+  }
+
   @Put(':value_id')
   @ApiBody({ required: true, type: ValuesDTO })
   @ApiParam({ name: 'value_id', required: true, type: 'number' })
