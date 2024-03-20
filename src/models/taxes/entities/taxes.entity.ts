@@ -6,6 +6,7 @@ import { AbstractEntity } from '@/models/abstract/entities/abstract.entity';
 import { ValuesEntity } from '@/models/values/entities/values.entity';
 import { OperationsEntity } from '@/models/operations/entities/operations.entity';
 import { TaxTypeEntity } from '@/models/tax_type/entities/tax_type.entity';
+import { BrokerageNoteEntity } from '@/models/brokerage_note/entities/brokerage_note.entity';
 
 @Entity('taxes')
 export class TaxesEntity extends AbstractEntity {
@@ -38,4 +39,14 @@ export class TaxesEntity extends AbstractEntity {
   @Min(1)
   @Exclude()
   operation_id: number;
+
+  @ManyToOne(() => BrokerageNoteEntity, (brokerage_note) => brokerage_note.id)
+  @JoinColumn([{ name: 'brokerage_note_id', referencedColumnName: 'id' }])
+  brokerage_note: BrokerageNoteEntity;
+
+  @Column()
+  @IsInt()
+  @Min(1)
+  @Exclude()
+  brokerage_note_id: number;
 }

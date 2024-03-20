@@ -28,6 +28,7 @@ import { BalanceModule } from '@/models/balance/balance.module';
 import { PtaxModule } from '@/models/ptax/ptax.module';
 import { AssetPriceModule } from '@/models/asset_price/asset_price.module';
 import { TransferModule } from './models/transfers/transfers.module';
+import { BrokerageNoteModule } from './models/brokerage_note/brokerage_note.module';
 
 @Module({
   imports: [
@@ -54,6 +55,7 @@ import { TransferModule } from './models/transfers/transfers.module';
     AssetPriceModule,
     AssetsModule,
     BalanceModule,
+    BrokerageNoteModule,
     CommonModule,
     CountryModule,
     INOperationTypeModule,

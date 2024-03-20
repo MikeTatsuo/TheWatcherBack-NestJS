@@ -6,6 +6,7 @@ import { AbstractEntity } from '@/models/abstract/entities/abstract.entity';
 import { OperationTypeEntity } from '@/models/operation_type/entities/operation_type.entity';
 import { AccountEntity } from '@/models/account/entities/account.entity';
 import { NiTypeEntity } from '@/models/ni_type/entities/ni_type.entity';
+import { BrokerageNoteEntity } from '@/models/brokerage_note/entities/brokerage_note.entity';
 
 @Entity('operations')
 export class OperationsEntity extends AbstractEntity {
@@ -46,4 +47,14 @@ export class OperationsEntity extends AbstractEntity {
   @Column({ type: 'timestamptz' })
   @IsDate()
   date: Date;
+
+  @ManyToOne(() => BrokerageNoteEntity, (brokerage_note) => brokerage_note.id)
+  @JoinColumn([{ name: 'brokerage_note_id', referencedColumnName: 'id' }])
+  brokerage_note: BrokerageNoteEntity;
+
+  @Column()
+  @IsInt()
+  @Min(1)
+  @Exclude()
+  brokerage_note_id: number;
 }
