@@ -13,7 +13,9 @@ async function bootstrap() {
   const appPort = configService.get('port');
   const document = SwaggerModule.createDocument(app, config);
 
-  SwaggerModule.setup('api', app, document);
+  SwaggerModule.setup('api', app, document, {
+    swaggerOptions: { tagsSorter: 'alpha', operationsSorter: 'alpha' },
+  });
 
   app.useGlobalPipes(new ValidationPipe({ transform: true }));
 
