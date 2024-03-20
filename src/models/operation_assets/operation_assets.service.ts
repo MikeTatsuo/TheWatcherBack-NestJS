@@ -128,6 +128,30 @@ export class OperationAssetsService {
     return this.operationAssetsRepository.save({ id, ...operationAssets });
   }
 
+  async updateOperationValue(
+    id: number,
+    valueToUpdate: ValuesDTO,
+    positive: boolean,
+  ): Promise<OperationAssetsEntity> {
+    return this.getById(id)
+      .then((operationAssets) => {
+        const valueData = {};
+
+        if (valueToUpdate.value) {
+          const value = ValueHelper.correctValue(valueToUpdate.value, positive);
+          Object.assign(valueData, { value });
+        }
+
+        if (valueToUpdate.qtd) {
+          const qtd = ValueHelper.correctQtd(valueToUpdate.qtd, positive);
+          Object.assign(valueData, { qtd });
+        }
+
+        return this.valuesService.update(operationAssets.value_id, valueData);
+      })
+      .then(() => this.getById(id));
+  }
+
   async delete(id: number | number[]): Promise<number | number[]> {
     return new Promise((resolve) => {
       this.operationAssetsRepository.softDelete(id).then((response) => {
